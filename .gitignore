@@ -1,6 +1,5 @@
 __pycache__/*
 backup/*
-LogListenerv2.py
 main.py
 TrapsConfiguration.py
 venv/*
