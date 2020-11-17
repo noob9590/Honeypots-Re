@@ -22,9 +22,9 @@ class LogListenerv2:
         ip_address = socket.gethostbyname(hostname)
         return ip_address
 
-    def __alert(self, data, event_id):
+    def __alert(self, data, event_id, honeypot_n):
         username = ""
-        honeypot_name = ""
+        honeypot_name = honeypot_n
         computer_name = data['Event']['System']['Computer']
         ip_address = self.get_ip(computer_name)
         system_time = data['Event']['System']['TimeCreated']['@SystemTime']
@@ -52,11 +52,9 @@ class LogListenerv2:
         print(json.dumps(alert_format, sort_keys=False, indent=4))
         requests.post("http://localhost:3000", data=alert_format)
 
-
     def listen(self, honeypot_configuration):
         h = win32event.CreateEvent(None, 0, 0, None)
         s = win32evtlog.EvtSubscribe(self.log_type, win32evtlog.EvtSubscribeStartAtOldestRecord, SignalEvent=h, Query=self.query_text)
-
         while True:
             while True:
                 events = win32evtlog.EvtNext(s, 10)
@@ -71,7 +69,7 @@ class LogListenerv2:
                     else:
                         event_id = event_format_dict['Event']['System']['EventID']['#text']
                     if self.__identify_honeypot(event_id, event_format_xml, honeypot_configuration) is True:
-                        self.__alert(event_format_dict, event_id)
+                        self.__alert(event_format_dict, event_id, honeypot_configuration[int(event_id)]['honeypotName'])
             while True:
                 print("waiting...")
                 w = win32event.WaitForSingleObjectEx(h, 10000, True)

@@ -25,7 +25,7 @@ class TrapsStructure:
             try:
                 self.configureList[int(event_id)] = {
                     "EventID": event_id,
-                    "EventData": []
+                    "EventData": [],
                 }
             except (ValueError, IndexError):
                 if event_id == "exit":
@@ -39,6 +39,8 @@ class TrapsStructure:
             while True:
                 event_data_param = input(input_param)
                 if event_data_param == "done":
+                    honeypot_name = input("Honeypot name\n>>>")
+                    self.configureList[int(event_id)]['honeypotName'] = honeypot_name
                     print(f"[+] The configuration for EventID: {event_id} was saved")
                     break
                 self.configureList[int(event_id)]['EventData'].append(event_data_param)
