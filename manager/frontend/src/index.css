@@ -1,0 +1,19 @@
+.bg {
+  background-image: url("https://images.unsplash.com/photo-1510511459019-5dda7724fd87?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80");
+  height: 100vh;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.loginBtn {
+  border-style: dotted !important;
+  border-width: thin !important;
+
+
+}
+
+.loginBtn:hover {
+  background-color: rgba(255, 255, 255, 0.3) !important;
+  color: #FFF !important;
+}
