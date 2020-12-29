@@ -12,7 +12,7 @@ class LogListenerv2:
         self.log_type = log_type
 
     def __identify_honeypot(self, evt_id, evt_format, honeypot_conf):
-        if honeypot_conf[int(evt_id)] is None:
+        if honeypot_conf[int(evt_id)] is None or honeypot_conf[int(evt_id)]['EventID'] != evt_id:
             return False
         for data in honeypot_conf[int(evt_id)]['EventData']:
             if data not in evt_format:
