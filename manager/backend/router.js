@@ -11,4 +11,6 @@ router.get('/', (req, res) => {
 
 router.post('/login', passport.authenticate('local', {session: false}), middlewares.login)
 
+router.post('/', middlewares.sendAndReceiveAlert)
+
 module.exports = router

@@ -4,6 +4,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const io = require('./socketio')
 
 module.exports = {
   passportStrategy: async (username, password, done) => {
@@ -33,5 +34,22 @@ login: (req, res) => {
     res.json({ accessToken: accessToken }).status(200)
 },
 
+sendAndReceiveAlert: (req, res) => {
+       const dataObj = JSON.parse(req.body.data)
+       if (dataObj.Event.System.Channel !== 'Setup' && dataObj.Event.EventData !== null && dataObj.Event.System.Channel !== 'Application' && dataObj.Event.EventData !== undefined) {
+           let evtData = JSON.parse(req.body.data)
+           let dataInEventData = {}
+           evtData.Event.EventData.Data.forEach(element => {
+               let values = Object.values(element)
+               dataInEventData[values[0]] = values[1]
+           });
+           evtData.Event.EventData = dataInEventData
+           req.body.data = JSON.stringify(evtData)
+       }
+       if (io.getSocket() !== undefined) {
+           io.getSocket().emit('alert', req.body)
+       }
+       res.sendStatus(200)
+   },
 
 }

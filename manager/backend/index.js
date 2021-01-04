@@ -13,6 +13,8 @@ const cert = fs.readFileSync('./security2/publiccert.pem')
 const app = express()
 const path = require('path')
 var server = require('https').createServer({ key: key, cert: cert }, app)
+var io = require('./socketio')
+io.init(server)
 
 const routers = require('./router')
 
