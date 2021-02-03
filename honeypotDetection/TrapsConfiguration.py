@@ -39,7 +39,7 @@ class TrapsStructure:
             while True:
                 event_data_param = input(input_param)
                 if event_data_param == "done":
-                    honeypot_name = input("Honeypot name\n>>>")
+                    honeypot_name = input("[+] Honeypot name\n>>>")
                     self.configureList[int(event_id)]['honeypotName'] = honeypot_name
                     print(f"[+] The configuration for EventID: {event_id} was saved")
                     break

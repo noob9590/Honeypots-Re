@@ -41,7 +41,7 @@ def open_configuration_file(file_path):
 def main():
     json_file = None
     threads = []
-    log_types = [{'logType': "System"}, {'logType': "Security"}, {'logType': 'Application'}, {'logType': "Setup"}]
+    log_types = [{'logType': "System"}, {'logType': "Security"}, {'logType': 'Application'}, {'logType': "Setup"}, {'logType': "ForwardedEvents"}]
     option = arguments_parser()
     if option.file_path is None:
         conf = TrapsConfiguration.TrapsStructure()

@@ -23,35 +23,43 @@ class LogListenerv2:
         ip_address = socket.gethostbyname(hostname)
         return ip_address
 
-    def __find_user_name(self, data, event_info, category_name):
-        event_info_keys = data['Event'][event_info].keys()
-        user_name_key = None
-        for key in event_info_keys:
-            if category_name in data['Event'][event_info][key]:
-                user_name_key = key
+    def __find_user_name_from_eventdata(self, data, event_info):
+        target_user_name = None
+        subject_user_name = None
+        for obj in data[event_info]:
+            if obj['@Name'] == 'TargetUserName':
+                target_user_name = obj['#text']
+            if obj['@Name'] == 'SubjectUserName':
+                subject_user_name = obj['#text']
+            if subject_user_name is not None and target_user_name is not None:
                 break
-        if user_name_key is not None:
-            return data['Event'][event_info][user_name_key][category_name]
-        return "No user information"
+        if target_user_name is not None:
+            return "Target: " + target_user_name
+        if subject_user_name is None:
+            return "No user information"
+        return "Subject: " + subject_user_name
 
-    def __local_events(self, data):
-        if 'EventData' in data['Event'] and 'SubjectUserName' in data['Event']['EventData']:
-            username = data['Event']['EventData']['SubjectUserName']
-        elif 'UserData' in data['Event']:
-            username = self.__find_user_name(data, 'UserData', 'SubjectUserName')
-        else:
-            username = "No user information"
-        return username
+    def __find_user_from_userdata(self, data, event_info):
+        event_info_keys = data[event_info].keys()
+        for key in event_info_keys:
+            try:
+                return data[event_info][key]['SubjectUserName']
+            except KeyError:
+                continue
+        return "No User Information"
 
-    def __remote_events(self, data):
-        username = "No user information"
-        if 'EventData' in data['Event']:
-            for data in data['Event']['EventData']['Data']:
-                if data['@Name'] == 'TargetUserName':
-                    username = data['#text']
-                    break
+
+    def __event_category(self, data):
+        if self.log_type == 'Security' or ('RenderingInfo' in data['Event'] and data['Event']['RenderingInfo']['Channel'] == 'Security'):
+            print("Security")
+            if "EventData" in data['Event']:
+                username = self.__find_user_name_from_eventdata(data['Event']['EventData'], 'Data')
+            elif 'UserData' in data['Event']:
+                username = self.__find_user_from_userdata(data['Event'], "UserData")
+        elif "UserData" in data['Event']:
+            username = self.__find_user_from_userdata(data['Event'], "UserData")
         else:
-            username = self.__find_user_name(data, 'UserData', 'TargetUserName')
+            username = "No User Information"
         return username
 
     def __alert(self, data, event_id, honeypot_n):
@@ -59,10 +67,7 @@ class LogListenerv2:
         computer_name = data['Event']['System']['Computer']
         ip_address = self.get_ip(computer_name)
         system_time = data['Event']['System']['TimeCreated']['@SystemTime']
-        if self.log_type == 'ForwardedEvents':
-            username = self.__remote_events(data)
-        else:
-            username = self.__local_events(data)
+        username = self.__event_category(data)
         alert_format = {
             "honeypot": honeypot_name,
             "eventId": event_id,
