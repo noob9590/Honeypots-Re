@@ -31,7 +31,7 @@ DB_CONNECTION=mongodb+srv://"your mongodb account information"<br/>
 This agent has 2 commands<br/>
 1.python main.py --start=configuration <br/>
 You can use this command in order to eneter the configuration to detect the windows event logs.<br/>
-If you do have a file with configuration in the correct format use the command "python main.py -f YOURFILENAME.txt<br/>
+2.If you do have a file with configuration in the correct format use the command "python main.py -f YOURFILENAME.txt<br/>
 For additional information run the command "python main.py -h"<br/>
 
 Soon as you run all the programs you can see the windows event logs showing in your web browser
