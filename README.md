@@ -27,7 +27,7 @@ DB_CONNECTION=mongodb+srv://"your mongodb account information"<br/>
 6.Ppen https://localhost:3002 in your browser
 
 
-<h3>honeypot detection agent<br/></h3>
+<h3>Honeypot Detection Agent<br/></h3>
 This agent has 2 commands<br/>
 1.python main.py --start=configuration <br/>
 You can use this command in order to eneter the configuration to detect the windows event logs.<br/>
