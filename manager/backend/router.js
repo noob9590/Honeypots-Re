@@ -9,6 +9,8 @@ router.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'build', 'index.html'))
 })
 
+router.get('/prevEvents', middlewares.authenticateToken, middlewares.returnPrevEvents)
+
 router.post('/login', passport.authenticate('local', {session: false}), middlewares.login)
 
 router.post('/', middlewares.sendAndReceiveAlert)

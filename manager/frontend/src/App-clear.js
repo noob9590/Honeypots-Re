@@ -1,10 +1,12 @@
 import React, { useState } from "react"
 import Login from './components/Login'
 import PrivateRoute from './components/PrivateRoute'
+import TopSearch from './components/Table'
 import PillsPage from './components/Links'
 
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import { AuthContext } from "./components/context/auth"
+
 
 function App() {
 
