@@ -24,7 +24,7 @@ DB_CONNECTION=mongodb+srv://"your mongodb account information"<br/>
 3.Create folder named security2 in the backend folder and drop the .Pem files over there<br/>
 4.Copy the build folder from the frontend folder to the backend folder<br/>
 5.Run the command "npm start" in the cmd<br/>
-6.Ppen https://localhost:3002 in your browser
+6.Open https://localhost:3002 in your browser
 
 
 <h3>Honeypot Detection Agent<br/></h3>
