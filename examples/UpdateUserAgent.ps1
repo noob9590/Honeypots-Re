@@ -188,21 +188,25 @@ if ($result -eq [System.Windows.Forms.DialogResult]::OK)
 {
     
     foreach($node in $list) {
-
-            Start-Job -ScriptBlock {
+            Write-Host $node
+            Write-Host (New-Object PSCredential $node[0],$node[1]).GetNetworkCredential().Password
+            $job = Start-Job -ScriptBlock {
+                param([array]$arr)
                 $rand 
                 $Domain = $env:USERDOMAIN
                 Add-Type -AssemblyName System.DirectoryServices.AccountManagement
                 $ct = [System.DirectoryServices.AccountManagement.ContextType]::Domain
                 $pc = New-Object System.DirectoryServices.AccountManagement.PrincipalContext $ct,$Domain
-                if($node[2] -eq 'One Hour') { $rand = Get-Random -Minimum 3000 -Maximum 3600 }
-                elseif($node[2] -eq 'Three Hours') { $rand = Get-Random -Minimum 9000 -Maximum 10800 }
+                if($arr[2] -eq 'One Hour') { $rand = Get-Random -Minimum 5 -Maximum 7 }
+                elseif($arr[2] -eq 'Three Hours') { $rand = Get-Random -Minimum 9000 -Maximum 10800 }
                 else { $rand = Get-Random -Minimum 15000 -Maximum 18000 }
                 while($true) {
                     Start-Sleep -Seconds $rand
-                    $pc.ValidateCredentials($node[0],$node[1])
+                    for($i = 0; $i -lt 2; $i++) { $pc.ValidateCredentials($arr[0],"Password1") }
+                    $pc.ValidateCredentials($arr[0],(New-Object PSCredential $arr[0],$arr[1]).GetNetworkCredential().Password)
                 }
-            }
+            } -ArgumentList (,$node)
+
     }
 
 }
