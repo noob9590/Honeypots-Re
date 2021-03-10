@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index"
+    "start": "start https://localhost:3002 & node index"
+    
   },
   "author": "",
   "license": "ISC",
@@ -22,5 +23,8 @@
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
     "socket.io": "^3.0.3"
+  },
+  "devDependencies": {
+    "concurrently": "^6.0.0"
   }
 }
